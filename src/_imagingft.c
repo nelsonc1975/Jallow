@@ -292,8 +292,13 @@ getfont(PyObject* self_, PyObject* args, PyObject* kw)
         }
     }
 
-    if (!error)
+    if (!error) {
         error = FT_Set_Pixel_Sizes(self->face, 0, size);
+        if (error == FT_Err_Invalid_Pixel_Size && self->face->num_fixed_sizes > 0) {
+            /* Fixed size font, just select the first one */
+            error = FT_Select_Size(self->face, 0);
+        }
+    }
 
     if (!error && encoding && strlen((char*) encoding) == 4) {
         FT_Encoding encoding_tag = FT_MAKE_TAG(
@@ -302,7 +307,7 @@ getfont(PyObject* self_, PyObject* args, PyObject* kw)
         error = FT_Select_Charmap(self->face, encoding_tag);
     }
     if (filename)
-      PyMem_Free(filename);
+        PyMem_Free(filename);
 
     if (error) {
         if (self->font_bytes) {
@@ -765,7 +770,7 @@ font_render(FontObject* self, PyObject* args)
 
         if (i == 0 && self->face->glyph->metrics.horiBearingX < 0) {
             x = -self->face->glyph->metrics.horiBearingX;
-     }
+        }
 
         glyph = self->face->glyph;
 
@@ -779,7 +784,8 @@ font_render(FontObject* self, PyObject* args)
         if (xx + x1 > im->xsize)
             x1 = im->xsize - xx;
 
-        if (mask) {
+        FT_Pixel_Mode pixel_mode = glyph->bitmap.pixel_mode;
+        if (pixel_mode == FT_PIXEL_MODE_MONO) {
             /* use monochrome mask (on palette images, etc) */
             for (y = 0; y < glyph->bitmap.rows; y++) {
                 int yy = y + im->ysize - (PIXEL(glyph->metrics.horiBearingY) + ascender);
@@ -799,7 +805,7 @@ font_render(FontObject* self, PyObject* args)
                 }
                 source += glyph->bitmap.pitch;
             }
-        } else {
+        } else if (pixel_mode == FT_PIXEL_MODE_GRAY) {
             /* use antialiased rendering */
             for (y = 0; y < glyph->bitmap.rows; y++) {
                 int yy = y + im->ysize - (PIXEL(glyph->metrics.horiBearingY) + ascender);
