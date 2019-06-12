@@ -178,7 +178,7 @@ def get_version():
     return locals()['__version__']
 
 
-NAME = 'Pillow'
+NAME = 'Jallow'
 PILLOW_VERSION = get_version()
 JPEG_ROOT = None
 JPEG2K_ROOT = None
