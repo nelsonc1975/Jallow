@@ -1,5 +1,8 @@
-from .helper import unittest, PillowTestCase
+import unittest
+
 from PIL import Image
+
+from .helper import PillowTestCase
 
 TEST_FILE = "Tests/images/libtiff_segfault.tif"
 
@@ -11,9 +14,9 @@ class TestLibtiffSegfault(PillowTestCase):
             """
 
         with self.assertRaises(IOError):
-            im = Image.open(TEST_FILE)
-            im.load()
+            with Image.open(TEST_FILE) as im:
+                im.load()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

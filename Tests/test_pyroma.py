@@ -1,6 +1,8 @@
-from .helper import unittest, PillowTestCase
+import unittest
 
 from PIL import __version__
+
+from .helper import PillowTestCase
 
 try:
     import pyroma
@@ -26,5 +28,5 @@ class TestPyroma(PillowTestCase):
             )
 
         else:
-            # Should have a near-perfect score
-            self.assertEqual(rating, (9, ["Your package does not have license data."]))
+            # Should have a perfect score
+            self.assertEqual(rating, (10, []))

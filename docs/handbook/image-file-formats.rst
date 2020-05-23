@@ -113,8 +113,8 @@ to seek to the next frame (``im.seek(im.tell() + 1)``).
 Saving
 ~~~~~~
 
-When calling :py:meth:`~PIL.Image.Image.save`, the following options
-are available::
+When calling :py:meth:`~PIL.Image.Image.save` to write a GIF file, the
+following options are available::
 
     im.save(out, save_all=True, append_images=[im1, im2, ...])
 
@@ -389,12 +389,12 @@ The :py:meth:`~PIL.Image.Image.save` method supports the following options:
     image will be saved without tiling.
 
 **quality_mode**
-    Either `"rates"` or `"dB"` depending on the units you want to use to
+    Either ``"rates"`` or ``"dB"`` depending on the units you want to use to
     specify image quality.
 
 **quality_layers**
     A sequence of numbers, each of which represents either an approximate size
-    reduction (if quality mode is `"rates"`) or a signal to noise ratio value
+    reduction (if quality mode is ``"rates"``) or a signal to noise ratio value
     in decibels.  If not specified, defaults to a single layer of full quality.
 
 **num_resolutions**
@@ -716,13 +716,19 @@ The :py:meth:`~PIL.Image.Image.save` method can take the following keyword argum
     :py:class:`~PIL.TiffImagePlugin.ImageFileDirectory_v1` object may
     be passed in this field. However, this is deprecated.
 
-    .. versionadded:: 3.0.0
+    .. versionadded:: 5.4.0
 
- .. note::
-
-    Only some tags are currently supported when writing using
+    Previous versions only supported some tags when writing using
     libtiff. The supported list is found in
     :py:attr:`~PIL:TiffTags.LIBTIFF_CORE`.
+
+    .. versionadded:: 6.1.0
+
+    Added support for signed types (e.g. ``TIFF_SIGNED_LONG``) and multiple values.
+    Multiple values for a single tag must be to
+    :py:class:`~PIL.TiffImagePlugin.ImageFileDirectory_v2` as a tuple and
+    require a matching type in
+    :py:attr:`~PIL.TiffImagePlugin.ImageFileDirectory_v2.tagtype` tagtype.
 
 **compression**
     A string containing the desired compression method for the
@@ -731,6 +737,12 @@ The :py:meth:`~PIL.Image.Image.save` method can take the following keyword argum
     ``"group4"``, ``"tiff_jpeg"``, ``"tiff_adobe_deflate"``,
     ``"tiff_thunderscan"``, ``"tiff_deflate"``, ``"tiff_sgilog"``,
     ``"tiff_sgilog24"``, ``"tiff_raw_16"``
+
+**quality**
+    The image quality for JPEG compression, on a scale from 0 (worst) to 100
+    (best). The default is 75.
+
+    .. versionadded:: 6.1.0
 
 These arguments to set the tiff header fields are an alternative to
 using the general tags available through tiffinfo.
@@ -747,18 +759,21 @@ using the general tags available through tiffinfo.
     Strings
 
 **resolution_unit**
-    A string of "inch", "centimeter" or "cm"
+    An integer. 1 for no unit, 2 for inches and 3 for centimeters.
 
 **resolution**
+    Either an integer or a float, used for both the x and y resolution.
 
 **x_resolution**
+    Either an integer or a float.
 
 **y_resolution**
+    Either an integer or a float.
 
 **dpi**
-    Either a Float, 2 tuple of (numerator, denominator) or a
-    :py:class:`~PIL.TiffImagePlugin.IFDRational`. Resolution implies
-    an equal x and y resolution, dpi also implies a unit of inches.
+    A tuple of (x_resolution, y_resolution), with inches as the resolution
+    unit. For consistency with other image formats, the x and y resolutions
+    of the dpi will be rounded to the nearest integer.
 
 
 WebP
@@ -796,10 +811,11 @@ Saving sequences
 
     Support for animated WebP files will only be enabled if the system WebP
     library is v0.5.0 or later. You can check webp animation support at
-    runtime by calling `features.check("webp_anim")`.
+    runtime by calling ``features.check("webp_anim")``.
 
-When calling :py:meth:`~PIL.Image.Image.save`, the following options
-are available when the `save_all` argument is present and true.
+When calling :py:meth:`~PIL.Image.Image.save` to write a WebP file, the
+following options are available when the ``save_all`` argument is present and
+true.
 
 **append_images**
     A list of images to append as additional frames. Each of the
@@ -1003,6 +1019,43 @@ this format.
 By default, a Quake2 standard palette is attached to the texture. To override
 the palette, use the putpalette method.
 
+WMF
+^^^
+
+Pillow can identify WMF files.
+
+On Windows, it can read WMF files. By default, it will load the image at 72
+dpi. To load it at another resolution:
+
+.. code-block:: python
+
+    from PIL import Image
+    with Image.open("drawing.wmf") as im:
+        im.load(dpi=144)
+
+To add other read or write support, use
+:py:func:`PIL.WmfImagePlugin.register_handler` to register a WMF handler.
+
+.. code-block:: python
+
+    from PIL import Image
+    from PIL import WmfImagePlugin
+
+    class WmfHandler:
+        def open(self, im):
+            ...
+        def load(self, im):
+            ...
+            return image
+        def save(self, im, fp, filename):
+            ...
+
+    wmf_handler = WmfHandler()
+
+    WmfImagePlugin.register_handler(wmf_handler)
+
+    im = Image.open("sample.wmf")
+
 XPM
 ^^^
 
@@ -1160,35 +1213,3 @@ MPEG
 ^^^^
 
 Pillow identifies MPEG files.
-
-WMF
-^^^
-
-Pillow can identify playable WMF files.
-
-In PIL 1.1.4 and earlier, the WMF driver provides some limited rendering
-support, but not enough to be useful for any real application.
-
-In PIL 1.1.5 and later, the WMF driver is a stub driver. To add WMF read or
-write support to your application, use
-:py:func:`PIL.WmfImagePlugin.register_handler` to register a WMF handler.
-
-::
-
-    from PIL import Image
-    from PIL import WmfImagePlugin
-
-    class WmfHandler:
-        def open(self, im):
-            ...
-        def load(self, im):
-            ...
-            return image
-        def save(self, im, fp, filename):
-            ...
-
-    wmf_handler = WmfHandler()
-
-    WmfImagePlugin.register_handler(wmf_handler)
-
-    im = Image.open("sample.wmf")

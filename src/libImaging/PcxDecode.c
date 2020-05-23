@@ -17,10 +17,18 @@
 #include "Imaging.h"
 
 int
-ImagingPcxDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
+ImagingPcxDecode(Imaging im, ImagingCodecState state, UINT8* buf, Py_ssize_t bytes)
 {
     UINT8 n;
     UINT8* ptr;
+
+    if (strcmp(im->mode, "1") == 0 && state->xsize > state->bytes * 8) {
+        state->errcode = IMAGING_CODEC_OVERRUN;
+        return -1;
+    } else if (strcmp(im->mode, "P") == 0 && state->xsize > state->bytes) {
+        state->errcode = IMAGING_CODEC_OVERRUN;
+        return -1;
+    }
 
     ptr = buf;
 

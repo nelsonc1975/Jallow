@@ -26,11 +26,11 @@
 
 
 int
-ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
+ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, Py_ssize_t bytes)
 {
     UINT8* ptr;
     int framesize;
-    int c, chunks;
+    int c, chunks, advance;
     int l, lines;
     int i, j, x = 0, y, ymax;
 
@@ -40,8 +40,7 @@ ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
 	return 0;
 
     /* We don't decode anything unless we have a full chunk in the
-       input buffer (on the other hand, the Python part of the driver
-       makes sure this is always the case) */
+       input buffer */
 
     ptr = buf;
 
@@ -52,6 +51,10 @@ ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
     /* Make sure this is a frame chunk.  The Python driver takes
        case of other chunk types. */
 
+    if (bytes < 8) {
+        state->errcode = IMAGING_CODEC_OVERRUN;
+        return -1;
+    }
     if (I16(ptr+4) != 0xF1FA) {
 	state->errcode = IMAGING_CODEC_UNKNOWN;
 	return -1;
@@ -59,10 +62,16 @@ ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
 
     chunks = I16(ptr+6);
     ptr += 16;
+    bytes -= 16;
 
     /* Process subchunks */
     for (c = 0; c < chunks; c++) {
-	UINT8 *data = ptr + 6;
+	UINT8* data;
+	if (bytes < 10) {
+	    state->errcode = IMAGING_CODEC_OVERRUN;
+	    return -1;
+	}
+	data = ptr + 6;
 	switch (I16(ptr+4)) {
 	case 4: case 11:
 	    /* FLI COLOR chunk */
@@ -198,7 +207,9 @@ ImagingFliDecode(Imaging im, ImagingCodecState state, UINT8* buf, int bytes)
 	    state->errcode = IMAGING_CODEC_UNKNOWN;
 	    return -1;
 	}
-	ptr += I32(ptr);
+	advance = I32(ptr);
+	ptr += advance;
+	bytes -= advance;
     }
 
     return -1; /* end of frame */

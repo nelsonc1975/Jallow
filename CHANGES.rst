@@ -2,6 +2,332 @@
 Changelog (Pillow)
 ==================
 
+7.0.0 (2020-01-02)
+------------------
+
+- Drop support for EOL Python 2.7 #4109
+  [hugovk, radarhere, jdufresne]
+
+- Fix rounding error on RGB to L conversion #4320
+  [homm]
+
+- Exif writing fixes: Rational boundaries and signed/unsigned types #3980
+  [kkopachev, radarhere]
+
+- Allow loading of WMF images at a given DPI #4311
+  [radarhere]
+
+- Added reduce operation #4251
+  [homm]
+
+- Raise ValueError for io.StringIO in Image.open #4302
+  [radarhere, hugovk]
+
+- Fix thumbnail geometry when DCT scaling is used #4231
+  [homm, radarhere]
+
+- Use default DPI when exif provides invalid x_resolution #4147
+  [beipang2, radarhere]
+
+- Change default resize resampling filter from NEAREST to BICUBIC #4255
+  [homm]
+
+- Fixed black lines on upscaled images with the BOX filter #4278
+  [homm]
+
+- Better thumbnail aspect ratio preservation #4256
+  [homm]
+
+- Add La mode packing and unpacking #4248
+  [homm]
+
+- Include tests in coverage reports #4173
+  [hugovk]
+
+- Handle broken Photoshop data #4239
+  [radarhere]
+
+- Raise a specific exception if no data is found for an MPO frame #4240
+  [radarhere]
+
+- Fix Unicode support for PyPy #4145
+  [nulano]
+
+- Added UnidentifiedImageError #4182
+  [radarhere, hugovk]
+
+- Remove deprecated __version__ from plugins #4197
+  [hugovk, radarhere]
+
+- Fixed freeing unallocated pointer when resizing with height too large #4116
+  [radarhere]
+
+- Copy info in Image.transform #4128
+  [radarhere]
+
+- Corrected DdsImagePlugin setting info gamma #4171
+  [radarhere]
+
+- Depends: Update libtiff to 4.1.0 #4195, Tk Tcl to 8.6.10 #4229, libimagequant to 2.12.6 #4318
+  [radarhere]
+
+- Improve handling of file resources #3577
+  [jdufresne]
+
+- Removed CI testing of Fedora 29 #4165
+  [hugovk]
+
+- Added pypy3 to tox envlist #4137
+  [jdufresne]
+
+- Drop support for EOL PyQt4 and PySide #4108
+  [hugovk, radarhere]
+
+- Removed deprecated setting of TIFF image sizes #4114
+  [radarhere]
+
+- Removed deprecated PILLOW_VERSION #4107
+  [hugovk]
+
+- Changed default frombuffer raw decoder args #1730
+  [radarhere]
+
+6.2.2 (2020-01-02)
+------------------
+
+- This is the last Pillow release to support Python 2.7 #3642
+
+- Overflow checks for realloc for tiff decoding. CVE TBD
+  [wiredfool, radarhere]
+
+- Catch SGI buffer overrun. CVE TBD
+  [radarhere]
+
+- Catch PCX P mode buffer overrun. CVE TBD
+  [radarhere]
+
+- Catch FLI buffer overrun. CVE TBD
+  [radarhere]
+
+- Raise an error for an invalid number of bands in FPX image. CVE-2019-19911
+  [wiredfool, radarhere]
+
+6.2.1 (2019-10-21)
+------------------
+
+- Add support for Python 3.8 #4141
+  [hugovk]
+
+6.2.0 (2019-10-01)
+------------------
+
+- Catch buffer overruns #4104
+  [radarhere]
+
+- Initialize rows_per_strip when RowsPerStrip tag is missing #4034
+  [cgohlke, radarhere]
+
+- Raise error if TIFF dimension is a string #4103
+  [radarhere]
+
+- Added decompression bomb checks #4102
+  [radarhere]
+
+- Fix ImageGrab.grab DPI scaling on Windows 10 version 1607+ #4000
+  [nulano, radarhere]
+
+- Corrected negative seeks #4101
+  [radarhere]
+
+- Added argument to capture all screens on Windows #3950
+  [nulano, radarhere]
+
+- Updated warning to specify when Image.frombuffer defaults will change #4086
+  [radarhere]
+
+- Changed WindowsViewer format to PNG #4080
+  [radarhere]
+
+- Use TIFF orientation #4063
+  [radarhere]
+
+- Raise the same error if a truncated image is loaded a second time #3965
+  [radarhere]
+
+- Lazily use ImageFileDirectory_v1 values from Exif #4031
+  [radarhere]
+
+- Improved HSV conversion #4004
+  [radarhere]
+
+- Added text stroking #3978
+  [radarhere, hugovk]
+
+- No more deprecated bdist_wininst .exe installers #4029
+  [hugovk]
+
+- Do not allow floodfill to extend into negative coordinates #4017
+  [radarhere]
+
+- Fixed arc drawing bug for a non-whole number of degrees #4014
+  [radarhere]
+
+- Fix bug when merging identical images to GIF with a list of durations #4003
+  [djy0, radarhere]
+
+- Fix bug in TIFF loading of BufferedReader #3998
+  [chadawagner]
+
+- Added fallback for finding ld on MinGW Cygwin #4019
+  [radarhere]
+
+- Remove indirect dependencies from requirements.txt #3976
+  [hugovk]
+
+- Depends: Update libwebp to 1.0.3 #3983, libimagequant to 2.12.5 #3993, freetype to 2.10.1 #3991
+  [radarhere]
+
+- Change overflow check to use PY_SSIZE_T_MAX #3964
+  [radarhere]
+
+- Report reason for pytest skips #3942
+  [hugovk]
+
+6.1.0 (2019-07-01)
+------------------
+
+- Deprecate Image.__del__ #3929
+  [jdufresne]
+
+- Tiff: Add support for JPEG quality #3886
+  [olt]
+
+- Respect the PKG_CONFIG environment variable when building #3928
+  [chewi]
+
+- Use explicit memcpy() to avoid unaligned memory accesses #3225
+  [DerDakon]
+
+- Improve encoding of TIFF tags #3861
+  [olt]
+
+- Update Py_UNICODE to Py_UCS4 #3780
+  [nulano]
+
+- Consider I;16 pixel size when drawing #3899
+  [radarhere]
+
+- Add TIFFTAG_SAMPLEFORMAT to blocklist #3926
+  [cgohlke, radarhere]
+
+- Create GIF deltas from background colour of GIF frames if disposal mode is 2 #3708
+  [sircinnamon, radarhere]
+
+- Added ImageSequence all_frames #3778
+  [radarhere]
+
+- Use unsigned int to store TIFF IFD offsets #3923
+  [cgohlke]
+
+- Include CPPFLAGS when searching for libraries #3819
+  [jefferyto]
+
+- Updated TIFF tile descriptors to match current decoding functionality #3795
+  [dmnisson]
+
+- Added an ``image.entropy()`` method (second revision) #3608
+  [fish2000]
+
+- Pass the correct types to PyArg_ParseTuple #3880
+  [QuLogic]
+
+- Fixed crash when loading non-font bytes #3912
+  [radarhere]
+
+- Fix SPARC memory alignment issues in Pack/Unpack functions #3858
+  [kulikjak]
+
+- Added CMYK;16B and CMYK;16N unpackers #3913
+  [radarhere]
+
+- Fixed bugs in calculating text size #3864
+  [radarhere]
+
+- Add __main__.py to output basic format and support information #3870
+  [jdufresne]
+
+- Added variation font support #3802
+  [radarhere]
+
+- Do not down-convert if image is LA when showing with PNG format #3869
+  [radarhere]
+
+- Improve handling of PSD frames #3759
+  [radarhere]
+
+- Improved ICO and ICNS loading #3897
+  [radarhere]
+
+- Changed Preview application path so that it is no longer static #3896
+  [radarhere]
+
+- Corrected ttb text positioning #3856
+  [radarhere]
+
+- Handle unexpected ICO image sizes #3836
+  [radarhere]
+
+- Fixed bits value for RGB;16N unpackers #3837
+  [kkopachev]
+
+- Travis CI: Add Fedora 30, remove Fedora 28 #3821
+  [hugovk]
+
+- Added reading of CMYK;16L TIFF images #3817
+  [radarhere]
+
+- Fixed dimensions of 1-bit PDFs #3827
+  [radarhere]
+
+- Fixed opening mmap image through Path on Windows #3825
+  [radarhere]
+
+- Fixed ImageDraw arc gaps #3824
+  [radarhere]
+
+- Expand GIF to include frames with extents outside the image size #3822
+  [radarhere]
+
+- Fixed ImageTk getimage #3814
+  [radarhere]
+
+- Fixed bug in decoding large images #3791
+  [radarhere]
+
+- Fixed reading APP13 marker without Photoshop data #3771
+  [radarhere]
+
+- Added option to include layered windows in ImageGrab.grab on Windows #3808
+  [radarhere]
+
+- Detect libimagequant when installed by pacman on MingW #3812
+  [radarhere]
+
+- Fixed raqm layout bug #3787
+  [radarhere]
+
+- Fixed loading font with non-Unicode path on Windows #3785
+  [radarhere]
+
+- Travis CI: Upgrade PyPy from 6.0.0 to 7.1.1 #3783
+  [hugovk, johnthagen]
+
+- Depends: Updated openjpeg to 2.3.1 #3794, raqm to 0.7.0 #3877, libimagequant to 2.12.3 #3889
+  [radarhere]
+
+- Fix numpy bool bug #3790
+  [radarhere]
+
 6.0.0 (2019-04-01)
 ------------------
 
@@ -545,7 +871,7 @@ Changelog (Pillow)
 - Enable background colour parameter on rotate #3057
   [storesource]
 
-- Remove unnecessary `#if 1` directive #3072
+- Remove unnecessary ``#if 1`` directive #3072
   [jdufresne]
 
 - Remove unused Python class, Path #3070
@@ -1082,7 +1408,7 @@ Changelog (Pillow)
 - Add decompression bomb check to Image.crop #2410
   [wiredfool]
 
-- ImageFile: Ensure that the `err_code` variable is initialized in case of exception. #2363
+- ImageFile: Ensure that the ``err_code`` variable is initialized in case of exception. #2363
   [alexkiro]
 
 - Tiff: Support append_images for saving multipage TIFFs #2406
@@ -1319,7 +1645,7 @@ Changelog (Pillow)
 - Removed PIL 1.0 era TK readme that concerns Windows 95/NT #2360
   [wiredfool]
 
-- Prevent `nose -v` printing docstrings #2369
+- Prevent ``nose -v`` printing docstrings #2369
   [hugovk]
 
 - Replaced absolute PIL imports with relative imports #2349
@@ -1408,7 +1734,7 @@ Changelog (Pillow)
 - Test: Faster assert_image_similar #2279
   [homm]
 
-- Removed depreciated internal "stretch" method #2276
+- Removed deprecated internal "stretch" method #2276
   [homm]
 
 - Removed the handles_eof flag in decode.c #2223
@@ -1764,7 +2090,7 @@ Changelog (Pillow)
 - Changed depends/install_*.sh urls to point to github pillow-depends repo #1983
   [wiredfool]
 
-- Allow ICC profile from `encoderinfo` while saving PNGs #1909
+- Allow ICC profile from ``encoderinfo`` while saving PNGs #1909
   [homm]
 
 - Fix integer overflow on ILP32 systems (32-bit Linux). #1975
@@ -2207,7 +2533,7 @@ Changelog (Pillow)
 - Added PDF multipage saving #1445
   [radarhere]
 
-- Removed deprecated code, Image.tostring, Image.fromstring, Image.offset, ImageDraw.setink, ImageDraw.setfill, ImageFileIO, ImageFont.FreeTypeFont and ImageFont.truetype `file` kwarg, ImagePalette private _make functions, ImageWin.fromstring and ImageWin.tostring #1343
+- Removed deprecated code, Image.tostring, Image.fromstring, Image.offset, ImageDraw.setink, ImageDraw.setfill, ImageFileIO, ImageFont.FreeTypeFont and ImageFont.truetype ``file`` kwarg, ImagePalette private _make functions, ImageWin.fromstring and ImageWin.tostring #1343
   [radarhere]
 
 - Load more broken images #1428
@@ -2699,7 +3025,7 @@ Changelog (Pillow)
 - Doc cleanup
   [wiredfool]
 
-- Fix `ImageStat` docs #796
+- Fix ``ImageStat`` docs #796
   [akx]
 
 - Added docs for ExifTags #794
@@ -3136,7 +3462,7 @@ Changelog (Pillow)
 - Add RGBA support to ImageColor #309
   [yoavweiss]
 
-- Test for `str`, not `"utf-8"` #306 (fixes #304)
+- Test for ``str``, not ``"utf-8"`` #306 (fixes #304)
   [mjpieters]
 
 - Fix missing import os in _util.py #303
@@ -3242,7 +3568,7 @@ Changelog (Pillow)
 
 - Partial work to add a wrapper for WebPGetFeatures to correctly support #220 (fixes #204)
 
-- Significant performance improvement of `alpha_composite` function #156
+- Significant performance improvement of ``alpha_composite`` function #156
   [homm]
 
 - Support explicitly disabling features via --disable-* options #240

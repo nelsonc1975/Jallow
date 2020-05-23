@@ -33,7 +33,6 @@
 #include "Python.h"
 
 #include "Imaging.h"
-#include "py3.h"
 
 #include "Gif.h"
 #include "Raw.h"
@@ -48,7 +47,7 @@
 typedef struct {
     PyObject_HEAD
     int (*decode)(Imaging im, ImagingCodecState state,
-                  UINT8* buffer, int bytes);
+                  UINT8* buffer, Py_ssize_t bytes);
     int (*cleanup)(ImagingCodecState state);
     struct ImagingCodecStateInstance state;
     Imaging im;
@@ -122,7 +121,7 @@ _decode(ImagingDecoderObject* decoder, PyObject* args)
     int status;
     ImagingSectionCookie cookie;
 
-    if (!PyArg_ParseTuple(args, PY_ARG_BYTES_LENGTH, &buffer, &bufsize))
+    if (!PyArg_ParseTuple(args, "y#", &buffer, &bufsize))
         return NULL;
 
     if (!decoder->pulls_fd) {
@@ -503,9 +502,9 @@ PyImaging_LibTiffDecoderNew(PyObject* self, PyObject* args)
     char* rawmode;
     char* compname;
     int fp;
-    int ifdoffset;
+    uint32 ifdoffset;
 
-    if (! PyArg_ParseTuple(args, "sssii", &mode, &rawmode, &compname, &fp, &ifdoffset))
+    if (! PyArg_ParseTuple(args, "sssiI", &mode, &rawmode, &compname, &fp, &ifdoffset))
         return NULL;
 
     TRACE(("new tiff decoder %s\n", compname));
