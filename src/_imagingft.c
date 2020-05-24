@@ -863,7 +863,7 @@ font_render(FontObject* self, PyObject* args)
         if (xx + x1 > im->xsize)
             x1 = im->xsize - xx;
 
-        FT_Pixel_Mode pixel_mode = glyph->bitmap.pixel_mode;
+        FT_Pixel_Mode pixel_mode = bitmap.pixel_mode;
         source = (unsigned char*) bitmap.buffer;
         for (bitmap_y = 0; bitmap_y < bitmap.rows; bitmap_y++) {
             if (horizontal_dir) {
